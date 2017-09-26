@@ -45,19 +45,19 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/erikstmartin/go-testdb"
-  packages = ["."]
-  revision = "8d10e4a1bae52cd8b81ffdec3445890d6dccab3d"
-
-[[projects]]
-  branch = "master"
   name = "github.com/fsouza/go-dockerclient"
   packages = ["."]
   revision = "d6c9513c3abe61f13e41c22bc013346eb96e1fe5"
 
 [[projects]]
-  name = "github.com/jinzhu/gorm"
+  name = "github.com/go-sql-driver/mysql"
   packages = ["."]
+  revision = "a0583e0143b1624142adab07e0e97fe106d99561"
+  version = "v1.3"
+
+[[projects]]
+  name = "github.com/jinzhu/gorm"
+  packages = [".","dialects/mysql","dialects/postgres"]
   revision = "5174cc5c242a728b435ea2be8a2f7f998e15429b"
   version = "v1.0"
 
@@ -66,6 +66,12 @@
   name = "github.com/jinzhu/inflection"
   packages = ["."]
   revision = "1c35d901db3da928c72a72d8458480cc9ade058f"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/lib/pq"
+  packages = [".","hstore","oid"]
+  revision = "b77235e3890a962fe8a6f8c4c7198679ca7814e7"
 
 [[projects]]
   name = "github.com/opencontainers/runc"
@@ -124,6 +130,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6d9029e001906ef7956de65750e7caba787219a9f6e3505635db10e1b43d47b9"
+  inputs-digest = "7336e3df84663c89ceb808ca273f378e5691e45a8c2df31275d4932ca39a5519"
   solver-name = "gps-cdcl"
   solver-version = 1
