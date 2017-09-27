@@ -1,17 +1,28 @@
 package zapgorm
 
 import (
-	"database/sql/driver"
 	"fmt"
+	"os"
 	"testing"
 
-	"github.com/erikstmartin/go-testdb"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
+
+	"github.com/wantedly/zap-gorm/testhelper"
 )
 
-func Test_Logger(t *testing.T) {
+var pool *testhelper.DockerPool
+
+func TestMain(m *testing.M) {
+	pool = testhelper.MustCreatePool()
+
+	os.Exit(m.Run())
+}
+
+func Test_Logger_Postgres(t *testing.T) {
 	fac, logs := observer.New(zap.DebugLevel)
 	zapLogger := zap.New(fac)
 	defer func() {
@@ -21,22 +32,19 @@ func Test_Logger(t *testing.T) {
 		}
 	}()
 
-	db, err := gorm.Open("testdb", "")
+	conn := pool.MustCreateDB(testhelper.DialectPostgres)
+	defer conn.MustClose()
+
+	db, err := gorm.Open(conn.Dialect, conn.URL)
 	if err != nil {
-		panic(fmt.Errorf("unexpected error: %v", err))
+		panic(err)
 	}
 
-	db.SetLogger(FromZap(zapLogger))
-	db.LogMode(true)
-
-	type Post struct{ Title, Body string }
-
-	testdb.SetExecWithArgsFunc(func(query string, args []driver.Value) (driver.Result, error) {
-		return testdb.NewResult(1, nil, 1, nil), nil
-	})
-	testdb.SetQueryWithArgsFunc(func(query string, args []driver.Value) (driver.Rows, error) {
-		return testdb.RowsFromCSVString([]string{"title"}, "awesome"), nil
-	})
+	type Post struct {
+		ID          uint
+		Title, Body string
+	}
+	db.AutoMigrate(&Post{})
 
 	cases := []struct {
 		run    func() error
@@ -44,8 +52,12 @@ func Test_Logger(t *testing.T) {
 		values []string
 	}{
 		{
-			run:    func() error { return db.Create(&Post{Title: "awesome"}).Error },
-			sql:    "INSERT INTO \"posts\" (\"title\",\"body\") VALUES (?,?)",
+			run: func() error { return db.Create(&Post{Title: "awesome"}).Error },
+			sql: fmt.Sprintf(
+				"INSERT INTO %q (%q,%q) VALUES ($1,$2) RETURNING %q.%q",
+				"posts", "title", "body",
+				"posts", "id",
+			),
 			values: []string{"awesome", ""},
 		},
 		{
@@ -57,14 +69,21 @@ func Test_Logger(t *testing.T) {
 			run: func() error {
 				return db.Where(&Post{Title: "awesome", Body: "This is awesome post !"}).First(&Post{}).Error
 			},
-			sql:    "SELECT * FROM \"posts\"  WHERE (\"title\" = ?) AND (\"body\" = ?) LIMIT 1",
+			sql: fmt.Sprintf(
+				"SELECT * FROM %q  WHERE (%q = $1) AND (%q = $2) ORDER BY %q.%q ASC LIMIT 1",
+				"posts", "title", "body",
+				"posts", "id",
+			),
 			values: []string{"awesome", "This is awesome post !"},
 		},
 	}
 
+	db.SetLogger(FromZap(zapLogger))
+	db.LogMode(true)
+
 	for _, c := range cases {
 		err := c.run()
-		if err != nil {
+		if err != nil && err != gorm.ErrRecordNotFound {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
