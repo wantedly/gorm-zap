@@ -6,8 +6,10 @@ import (
 	dockertest "gopkg.in/ory-am/dockertest.v3"
 )
 
+// Dialect containers metadata that differ across SQL database
 type Dialect int
 
+// Enum values for Dialect
 const (
 	DialectUnknown Dialect = iota
 	DialectMySQL

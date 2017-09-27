@@ -6,6 +6,7 @@ import (
 	dockertest "gopkg.in/ory-am/dockertest.v3"
 )
 
+// MustCreatePool creates new docker remove API client instance
 func MustCreatePool() *DockerPool {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
@@ -17,16 +18,19 @@ func MustCreatePool() *DockerPool {
 	}
 }
 
+// DockerPool wraps dockertest.Pool
 type DockerPool struct {
 	pool *dockertest.Pool
 }
 
+// DockerConnection contains connections to a docker container
 type DockerConnection struct {
 	MustClose func()
 	URL       string
 	Dialect   string
 }
 
+// MustCreateDB creates new database container
 func (dp *DockerPool) MustCreateDB(d Dialect) *DockerConnection {
 	params, ok := dialectParamsByDialect[d]
 	if !ok {
