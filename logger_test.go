@@ -78,7 +78,7 @@ func Test_Logger_Postgres(t *testing.T) {
 		},
 	}
 
-	db.SetLogger(FromZap(zapLogger))
+	db.SetLogger(New(zapLogger))
 	db.LogMode(true)
 
 	for _, c := range cases {

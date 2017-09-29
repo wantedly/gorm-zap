@@ -4,8 +4,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// FromZap create logger object for *gorm.DB from *zap.Logger
-func FromZap(zap *zap.Logger) *Logger {
+// New create logger object for *gorm.DB from *zap.Logger
+func New(zap *zap.Logger) *Logger {
 	return &Logger{
 		zap: zap,
 	}
