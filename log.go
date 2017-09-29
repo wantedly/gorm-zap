@@ -12,7 +12,7 @@ import (
 type log struct {
 	occurredAt time.Time
 	source     string
-	duration   int64
+	duration   time.Duration
 	sql        string
 	values     []string
 	other      []string
@@ -20,9 +20,9 @@ type log struct {
 
 func (l *log) toZapFields() []zapcore.Field {
 	return []zapcore.Field{
-		zap.String("occurredAt", fmt.Sprint(l.occurredAt)),
+		zap.Time("occurredAt", l.occurredAt),
 		zap.String("source", l.source),
-		zap.Int64("duration", l.duration),
+		zap.Duration("duration", l.duration),
 		zap.String("sql", l.sql),
 		zap.Strings("values", l.values),
 		zap.Strings("other", l.other),
