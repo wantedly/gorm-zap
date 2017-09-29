@@ -1,4 +1,4 @@
-package zapgorm
+package gormzap
 
 import (
 	"fmt"

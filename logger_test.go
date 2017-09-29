@@ -1,4 +1,4 @@
-package zapgorm
+package gormzap
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
 
-	"github.com/wantedly/zap-gorm/testhelper"
+	"github.com/wantedly/gorm-zap/testhelper"
 )
 
 var pool *testhelper.DockerPool
