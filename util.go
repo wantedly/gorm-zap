@@ -48,6 +48,6 @@ func getCurrentTime(values []interface{}) []string {
 	return []string{fmt.Sprint(gorm.NowFunc())}
 }
 
-func getDuration(values []interface{}) int64 {
-	return values[2].(time.Duration).Nanoseconds()
+func getDuration(values []interface{}) time.Duration {
+	return values[2].(time.Duration)
 }
