@@ -1,0 +1,27 @@
+language: go
+
+go:
+- 1.8
+- 1.9
+
+sudo: required
+
+services:
+- docker
+
+cache:
+  directories:
+  - vendor
+
+before_install:
+- go get -u github.com/golang/dep/cmd/dep
+- go get -u github.com/golang/lint/golint
+- export PATH=$PWD/bin:$PATH
+
+install:
+- dep ensure -v
+
+script:
+- golint -set_exit_status
+- go vet -v
+- go test .
