@@ -1,4 +1,4 @@
-package zapgorm
+package gormzap
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
 
-	"github.com/wantedly/zap-gorm/testhelper"
+	"github.com/wantedly/gorm-zap/testhelper"
 )
 
 var pool *testhelper.DockerPool
@@ -78,7 +78,7 @@ func Test_Logger_Postgres(t *testing.T) {
 		},
 	}
 
-	db.SetLogger(FromZap(zapLogger))
+	db.SetLogger(New(zapLogger))
 	db.LogMode(true)
 
 	for _, c := range cases {

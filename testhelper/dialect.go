@@ -38,7 +38,7 @@ func (p *dialectParams) URL(res *dockertest.Resource) string {
 	return fmt.Sprintf(p.urlFmt, res.GetPort(p.portID))
 }
 
-var databaseName = "zapgorm_test"
+var databaseName = "gormzap_test"
 var databasePass = "secret"
 
 var dialectParamsByDialect = map[Dialect]dialectParams{
