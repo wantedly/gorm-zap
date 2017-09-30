@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"time"
 	"unicode"
-
-	"github.com/jinzhu/gorm"
 )
 
 func isPrintable(s string) bool {
@@ -42,10 +40,6 @@ func getFormattedValues(values []interface{}) []string {
 
 func getSource(values []interface{}) string {
 	return fmt.Sprint(values[1])
-}
-
-func getCurrentTime(values []interface{}) []string {
-	return []string{fmt.Sprint(gorm.NowFunc())}
 }
 
 func getDuration(values []interface{}) time.Duration {
