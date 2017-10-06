@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -35,14 +36,17 @@ func Test_Logger_Postgres(t *testing.T) {
 	conn := pool.MustCreateDB(testhelper.DialectPostgres)
 	defer conn.MustClose()
 
+	now := time.Now()
+	gorm.NowFunc = func() time.Time { return now }
+
 	db, err := gorm.Open(conn.Dialect, conn.URL)
 	if err != nil {
 		panic(err)
 	}
 
 	type Post struct {
-		ID          uint
 		Title, Body string
+		CreatedAt   time.Time
 	}
 	db.AutoMigrate(&Post{})
 
@@ -54,11 +58,11 @@ func Test_Logger_Postgres(t *testing.T) {
 		{
 			run: func() error { return db.Create(&Post{Title: "awesome"}).Error },
 			sql: fmt.Sprintf(
-				"INSERT INTO %q (%q,%q) VALUES ($1,$2) RETURNING %q.%q",
-				"posts", "title", "body",
-				"posts", "id",
+				"INSERT INTO %q (%q,%q,%q) VALUES ($1,$2,$3) RETURNING %q.*",
+				"posts", "title", "body", "created_at",
+				"posts",
 			),
-			values: []string{"awesome", ""},
+			values: []string{"awesome", "", now.String()},
 		},
 		{
 			run:    func() error { return db.Model(&Post{}).Find(&[]*Post{}).Error },
@@ -70,9 +74,8 @@ func Test_Logger_Postgres(t *testing.T) {
 				return db.Where(&Post{Title: "awesome", Body: "This is awesome post !"}).First(&Post{}).Error
 			},
 			sql: fmt.Sprintf(
-				"SELECT * FROM %q  WHERE (%q = $1) AND (%q = $2) ORDER BY %q.%q ASC LIMIT 1",
+				"SELECT * FROM %q  WHERE (%q = $1) AND (%q = $2) LIMIT 1",
 				"posts", "title", "body",
-				"posts", "id",
 			),
 			values: []string{"awesome", "This is awesome post !"},
 		},
