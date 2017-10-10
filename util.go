@@ -16,8 +16,9 @@ func isPrintable(s string) bool {
 }
 
 func getFormattedValues(values []interface{}) []string {
-	formattedValues := []string{}
-	for _, value := range values[4].([]interface{}) {
+	rawValues := values[4].([]interface{})
+	formattedValues := make([]string, 0, len(rawValues))
+	for _, value := range rawValues {
 		switch v := value.(type) {
 		case time.Time:
 			formattedValues = append(formattedValues, fmt.Sprint(v))
