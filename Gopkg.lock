@@ -45,6 +45,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/erikstmartin/go-testdb"
+  packages = ["."]
+  revision = "8d10e4a1bae52cd8b81ffdec3445890d6dccab3d"
+
+[[projects]]
+  branch = "master"
   name = "github.com/fsouza/go-dockerclient"
   packages = ["."]
   revision = "d6c9513c3abe61f13e41c22bc013346eb96e1fe5"
@@ -99,7 +105,7 @@
 
 [[projects]]
   name = "go.uber.org/zap"
-  packages = [".","buffer","internal/bufferpool","internal/color","internal/exit","zapcore","zaptest/observer"]
+  packages = [".","buffer","internal/bufferpool","internal/color","internal/exit","zapcore","zaptest","zaptest/observer"]
   revision = "7a9ca91fa627ed52c7ff4fcc95cd044dc2c82a51"
   version = "v1.7.0"
 
@@ -130,6 +136,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7336e3df84663c89ceb808ca273f378e5691e45a8c2df31275d4932ca39a5519"
+  inputs-digest = "6dbcc0aaf1c3fe15bed94111ec55da06dec714bfff1c9cdf8347bd5374771e2b"
   solver-name = "gps-cdcl"
   solver-version = 1
