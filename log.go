@@ -2,6 +2,7 @@ package gormzap
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -40,7 +41,8 @@ func createLog(values []interface{}) *log {
 		if level == "sql" {
 			ret.duration = getDuration(values)
 			ret.values = getFormattedValues(values)
-			ret.sql = values[3].(string)
+			ret.sql = getFormatSQL(values, ret.values)
+			ret.other = append(ret.other, strconv.FormatInt(values[5].(int64), 10)+" rows affected or returned ")
 		} else {
 			ret.other = append(ret.other, fmt.Sprint(values[2:]))
 		}

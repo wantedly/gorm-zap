@@ -2,8 +2,14 @@ package gormzap
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 	"unicode"
+)
+
+var (
+	sqlRegexp                = regexp.MustCompile(`\?`)
+	numericPlaceHolderRegexp = regexp.MustCompile(`\$\d+`)
 )
 
 func isPrintable(s string) bool {
@@ -37,6 +43,29 @@ func getFormattedValues(values []interface{}) []string {
 		}
 	}
 	return formattedValues
+}
+
+func getFormatSQL(values []interface{}, ret []string) string {
+	var sql string
+
+	// differentiate between $n placeholders or else treat like ?
+	if numericPlaceHolderRegexp.MatchString(values[3].(string)) {
+		sql = values[3].(string)
+		for index, value := range ret {
+			placeholder := fmt.Sprintf(`\$%d([^\d]|$)`, index+1)
+			sql = regexp.MustCompile(placeholder).ReplaceAllString(sql, value+"$1")
+		}
+	} else {
+		formattedValuesLength := len(ret)
+		for index, value := range sqlRegexp.Split(values[3].(string), -1) {
+			sql += value
+			if index < formattedValuesLength {
+				sql += ret[index]
+			}
+		}
+	}
+
+	return sql
 }
 
 func getSource(values []interface{}) string {
