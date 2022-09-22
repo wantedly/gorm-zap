@@ -3,7 +3,7 @@ package testhelper
 import (
 	"database/sql"
 
-	dockertest "gopkg.in/ory-am/dockertest.v3"
+	dockertest "github.com/ory/dockertest/v3"
 )
 
 // MustCreatePool creates new docker remove API client instance

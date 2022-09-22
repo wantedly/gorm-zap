@@ -3,7 +3,7 @@ package testhelper
 import (
 	"fmt"
 
-	dockertest "gopkg.in/ory-am/dockertest.v3"
+	dockertest "github.com/ory/dockertest/v3"
 )
 
 // Dialect containers metadata that differ across SQL database
