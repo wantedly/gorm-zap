@@ -1,10 +1,9 @@
 # gormzap
-[![Build Status](https://travis-ci.org/wantedly/gorm-zap.svg?branch=master)](https://travis-ci.org/wantedly/gorm-zap)
-[![codecov](https://codecov.io/gh/wantedly/gorm-zap/branch/master/graph/badge.svg)](https://codecov.io/gh/wantedly/gorm-zap)
-[![GoDoc](https://godoc.org/github.com/wantedly/gorm-zap?status.svg)](https://godoc.org/github.com/wantedly/gorm-zap)
-[![license](https://img.shields.io/github/license/wantedly/gorm-zap.svg)](./LICENSE)
+[![ci](https://github.com/slashformotion/gorm-zap/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/slashformotion/gorm-zap/actions/workflows/ci.yml)
+[![GoDoc](https://godoc.org/github.com/slashformotion/gorm-zap?status.svg)](https://godoc.org/github.com/slashformotion/gorm-zap)
+[![license](https://img.shields.io/github/license/slashformotion/gorm-zap.svg)](./LICENSE)
 
-Alternative logging with [zap](https://github.com/uber-go/zap) for [GORM](http://jinzhu.me/gorm) ⚡️
+Alternative logging with [zap](https://github.com/uber-go/zap) for [GORM](https://gorm.io) ⚡️
 
 In comparison to gorm's default logger, `gormzap` is faster, reflection free, low allocations and no regex compilations.
 
@@ -16,7 +15,7 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/wantedly/gorm-zap"
+	"github.com/slashformotion/gorm-zap"
 )
 
 const (

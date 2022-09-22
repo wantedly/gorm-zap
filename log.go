@@ -18,6 +18,7 @@ type log struct {
 	other      []string
 }
 
+// Convert log to a list of ZapField
 func (l *log) toZapFields() []zapcore.Field {
 	return []zapcore.Field{
 		zap.Time("occurredAt", l.occurredAt),
@@ -29,6 +30,7 @@ func (l *log) toZapFields() []zapcore.Field {
 	}
 }
 
+// create a log instance from gorm values
 func createLog(values []interface{}) *log {
 	ret := &log{}
 	ret.occurredAt = gorm.NowFunc()

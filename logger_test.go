@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
 
-	"github.com/wantedly/gorm-zap/testhelper"
+	"github.com/slashformotion/gorm-zap/testhelper"
 )
 
 var pool *testhelper.DockerPool
@@ -74,8 +74,8 @@ func Test_Logger_Postgres(t *testing.T) {
 				return db.Where(&Post{Title: "awesome", Body: "This is awesome post !"}).First(&Post{}).Error
 			},
 			sql: fmt.Sprintf(
-				"SELECT * FROM %q  WHERE (%q = $1) AND (%q = $2) LIMIT 1",
-				"posts", "title", "body",
+				"SELECT * FROM %q  WHERE (%q.%q = $1) AND (%q.%q = $2) LIMIT 1",
+				"posts", "posts", "title", "posts", "body",
 			),
 			values: []string{"awesome", "This is awesome post !"},
 		},
